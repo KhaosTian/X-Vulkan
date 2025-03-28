@@ -1,37 +1,31 @@
 #pragma once
 
+#include "GLFW/glfw3.h"
 #include "Vulkan.hpp"
+#include "WIndowConfig.hpp"
+#include <functional>
 
 namespace Vulkan {
 
-struct WindowData {
-    int         width;
-    int         height;
-    std::string title;
-    bool        is_fullscreen;
-    bool        resizable;
-    bool        hide_title;
-};
-
 class Window final {
+    VULKAN_HANDLE(GLFWwindow*, m_window)
+private:
+    WindowConfig m_config;
+
 public:
-    Window(Window&&) = delete;
-    explicit Window(const WindowData& data);
+    NON_COPY(Window)
+    explicit Window(const WindowConfig& config);
     ~Window();
 
-    GLFWwindow*       Handle() const { return m_window; }
-    const WindowData& Data() const { return m_data; }
+public:
+    const WindowConfig& config() const { return m_config; }
 
-    VkExtent2D               FramebufferSize() const;
-    std::vector<const char*> QueryRequiredInstanceExtensions() const;
+    VkExtent2D               GetWindowSize() const;
+    std::vector<const char*> GetRequiredInstanceExtensions() const;
 
     void PollEvents() const;
     void WaitEvents() const;
     bool ShouldClose() const;
-
-private:
-    const WindowData m_data;
-    GLFWwindow*      m_window { nullptr };
 };
 
 } // namespace Vulkan
