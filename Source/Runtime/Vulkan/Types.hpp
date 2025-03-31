@@ -3,6 +3,14 @@
 #include "Vulkan.hpp"
 
 namespace Vulkan {
+struct WindowConfig {
+    uint32_t    width;
+    uint32_t    height;
+    std::string title;
+    bool        is_fullscreen;
+    bool        enable_resize;
+};
+
 struct QueueFamilyIndices {
     uint32_t graphics = UINT32_MAX;
     uint32_t present  = UINT32_MAX;

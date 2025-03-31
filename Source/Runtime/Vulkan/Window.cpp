@@ -1,5 +1,5 @@
 #include "Window.hpp"
-#include "GLFW/glfw3.h"
+#include "Types.hpp"
 
 namespace Vulkan {
 Window::Window(const WindowConfig& config): m_config(config) {

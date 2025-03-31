@@ -1,11 +1,13 @@
 #pragma once
 
 #include "GLFW/glfw3.h"
+#include "Types.hpp"
 #include "Vulkan.hpp"
-#include "WIndowConfig.hpp"
+
 #include <functional>
 
 namespace Vulkan {
+class WindowConfig;
 
 class Window final {
     VULKAN_HANDLE(GLFWwindow*, m_window)
