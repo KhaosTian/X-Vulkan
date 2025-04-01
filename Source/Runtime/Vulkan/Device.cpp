@@ -1,7 +1,7 @@
-#include "Device.hpp"
-#include "Surface.hpp"
-#include "Enumerate.hpp"
-#include "Vulkan.hpp"
+#include <Vulkan/Device.hpp>
+#include <Vulkan/Surface.hpp>
+#include <Vulkan/Enumerate.hpp>
+#include <Vulkan/Vulkan.hpp>
 
 namespace Vulkan {
 
@@ -11,14 +11,14 @@ Device::Device(
     const std::vector<const char*>& required_extensions,
     const VkPhysicalDeviceFeatures& device_features
 ):
-    m_vk_physical_device(physical_device),
+    m_physical_device(physical_device),
     m_surface(surface),
     m_device_features(device_features) {
     // 检查设备是否支持必要的扩展
     CheckRequiredExtensionsSupport(required_extensions);
 
     // 寻找队列族索引
-    const auto queue_families = GetEnumerateVector(m_vk_physical_device, vkGetPhysicalDeviceQueueFamilyProperties);
+    const auto queue_families = GetEnumerateVector(m_physical_device, vkGetPhysicalDeviceQueueFamilyProperties);
     m_queue_indices           = FindQueueFamilyIndices(queue_families);
 
     // 构造队列创建信息数组
@@ -49,23 +49,20 @@ Device::Device(
     device_create_info.enabledLayerCount       = 0;
 
     // 创建逻辑设备
-    VK_CHECK(vkCreateDevice(m_vk_physical_device, &device_create_info, nullptr, &m_vk_device), "create logical device")
+    VK_CHECK(vkCreateDevice(m_physical_device, &device_create_info, nullptr, &m_handle), "create logical device")
 
     // 获取队列句柄
-    vkGetDeviceQueue(m_vk_device, m_queue_indices.graphics, 0, &m_queue_graphics);
-    vkGetDeviceQueue(m_vk_device, m_queue_indices.present, 0, &m_queue_present);
-    vkGetDeviceQueue(m_vk_device, m_queue_indices.compute, 0, &m_queue_compute);
+    vkGetDeviceQueue(m_handle, m_queue_indices.graphics, 0, &m_queue_graphics);
+    vkGetDeviceQueue(m_handle, m_queue_indices.present, 0, &m_queue_present);
+    vkGetDeviceQueue(m_handle, m_queue_indices.compute, 0, &m_queue_compute);
 
     // 获取设备属性
-    vkGetPhysicalDeviceProperties(m_vk_physical_device, &m_device_properties);
+    vkGetPhysicalDeviceProperties(m_physical_device, &m_device_properties);
 }
 
 void Device::CheckRequiredExtensionsSupport(const std::vector<const char*>& required_extensions) const {
-    const auto available_extensions = GetEnumerateVector(
-        m_vk_physical_device,
-        static_cast<const char*>(nullptr),
-        vkEnumerateDeviceExtensionProperties
-    );
+    const auto available_extensions =
+        GetEnumerateVector(m_physical_device, static_cast<const char*>(nullptr), vkEnumerateDeviceExtensionProperties);
 
     // 必需扩展转换为哈希表，然后剔除所有设备支持的扩展
     std::set<std::string> required_extension_set(required_extensions.begin(), required_extensions.end());
@@ -89,7 +86,7 @@ QueueFamilyIndices Device::FindQueueFamilyIndices(const std::vector<VkQueueFamil
         if (queue_family.queueFlags & VK_QUEUE_COMPUTE_BIT) indices.compute = i;
 
         VkBool32 is_present_support = false;
-        vkGetPhysicalDeviceSurfaceSupportKHR(m_vk_physical_device, i, m_surface.handle(), &is_present_support);
+        vkGetPhysicalDeviceSurfaceSupportKHR(m_physical_device, i, m_surface.handle(), &is_present_support);
         if (is_present_support) indices.present = i;
 
         if (indices.IsComplete()) break;
@@ -98,14 +95,14 @@ QueueFamilyIndices Device::FindQueueFamilyIndices(const std::vector<VkQueueFamil
 }
 
 void Device::WaitIdle() const {
-    VK_CHECK(vkDeviceWaitIdle(m_vk_device), "wait for device idle");
+    VK_CHECK(vkDeviceWaitIdle(m_handle), "wait for device idle");
 }
 
 Device::~Device() {
-    if (m_vk_device == nullptr) return;
+    if (m_handle == nullptr) return;
 
-    vkDestroyDevice(m_vk_device, nullptr);
-    m_vk_device = nullptr;
+    vkDestroyDevice(m_handle, nullptr);
+    m_handle = nullptr;
 }
 
 } // namespace Vulkan

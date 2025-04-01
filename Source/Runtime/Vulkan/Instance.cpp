@@ -1,8 +1,8 @@
-#include "Instance.hpp"
-#include "Exception.hpp"
-#include "Vulkan.hpp"
-#include "Window.hpp"
-#include "Enumerate.hpp"
+#include <Vulkan/Instance.hpp>
+#include <Vulkan/Exception.hpp>
+#include <Vulkan/Vulkan.hpp>
+#include <Vulkan/Window.hpp>
+#include <Vulkan/Enumerate.hpp>
 
 namespace Vulkan {
 Instance::Instance(const Window& window, const std::vector<const char*>& validation_layers): m_window(window) {
@@ -20,7 +20,7 @@ Instance::Instance(const Window& window, const std::vector<const char*>& validat
     app_info.applicationVersion = VK_MAKE_VERSION(1, 0, 0);
     app_info.pEngineName        = "NOVA";
     app_info.engineVersion      = VK_MAKE_VERSION(1, 0, 0);
-    app_info.apiVersion         = m_vk_api_version;
+    app_info.apiVersion         = m_api_version;
 
     // 实例创建信息
     VkInstanceCreateInfo create_info    = {};
@@ -32,10 +32,10 @@ Instance::Instance(const Window& window, const std::vector<const char*>& validat
     create_info.ppEnabledLayerNames     = validation_layers.data();
 
     // 创建实例
-    VK_CHECK(vkCreateInstance(&create_info, nullptr, &m_vk_instance), "create vulkan instance");
+    VK_CHECK(vkCreateInstance(&create_info, nullptr, &m_handle), "create vulkan instance");
 
     // 枚举物理设备
-    m_vk_physical_devices = GetEnumerateVector(m_vk_instance, vkEnumeratePhysicalDevices);
+    m_physical_devices = GetEnumerateVector(m_handle, vkEnumeratePhysicalDevices);
 }
 
 void Instance::CheckValidationLayersSupport(const std::vector<const char*>& validation_layers) const {
@@ -61,9 +61,9 @@ void Instance::CheckValidationLayersSupport(const std::vector<const char*>& vali
 }
 
 Instance::~Instance() {
-    if (m_vk_instance == nullptr) return;
+    if (m_handle == nullptr) return;
 
-    vkDestroyInstance(m_vk_instance, nullptr);
-    m_vk_instance = nullptr;
+    vkDestroyInstance(m_handle, nullptr);
+    m_handle = nullptr;
 }
 } // namespace Vulkan

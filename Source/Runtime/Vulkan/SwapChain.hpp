@@ -1,9 +1,7 @@
 #pragma once
 
-#include "Vulkan.hpp"
-#include "Types.hpp"
-#include <memory>
-#include <vector>
+#include <Vulkan/Vulkan.hpp>
+#include <Vulkan/Types.hpp>
 
 namespace Vulkan {
 class Device;
@@ -11,23 +9,24 @@ class ImageView;
 class Window;
 
 class SwapChain final {
-    VULKAN_HANDLE(VkSwapchainKHR, m_vk_swapchain)
 private:
+    VkSwapchainKHR                          m_handle {};
     const Device&                           m_device;
-    const VkPhysicalDevice                  m_vk_physical_device { nullptr };
+    const VkPhysicalDevice                  m_physical_device { nullptr };
     std::vector<VkImage>                    m_images {};
     std::vector<std::unique_ptr<ImageView>> m_image_views {};
     VkPresentModeKHR                        m_present_mode {};
     SwapchainConfig                         m_config {};
 
 public:
-    NON_COPY(SwapChain)
+    SwapChain(SwapChain&&) = delete;
     SwapChain(const Device& device, const VkPresentModeKHR present_mode);
     ~SwapChain();
 
 public:
+    VkSwapchainKHR         handle() const { return m_handle; }
     const Device&          device() const { return m_device; }
-    const VkPhysicalDevice vk_physical_device() const { return m_vk_physical_device; }
+    const VkPhysicalDevice vk_physical_device() const { return m_physical_device; }
 
 private:
     static SwapchainSupportDetails QuerySwapChainSupport(VkPhysicalDevice physicalDevice, const VkSurfaceKHR surface);

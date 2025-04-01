@@ -1,5 +1,5 @@
 #pragma once
-#include "Vulkan.hpp"
+#include <Vulkan/Vulkan.hpp>
 
 namespace Vulkan {
 class Device;
@@ -9,10 +9,10 @@ public:
     ~ImageView();
     ImageView(ImageView&&) = delete;
 
-    VkImageView handle() const { return m_image_view; }
+    VkImageView handle() const { return m_handle; }
 
 private:
-    VkImageView   m_image_view { nullptr };
+    VkImageView   m_handle { nullptr };
     const Device& m_device;
 };
 

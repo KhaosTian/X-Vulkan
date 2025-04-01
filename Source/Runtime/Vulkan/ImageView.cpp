@@ -1,5 +1,5 @@
-#include "ImageView.hpp"
-#include "Device.hpp"
+#include <Vulkan/ImageView.hpp>
+#include <Vulkan/Device.hpp>
 
 namespace Vulkan {
 
@@ -29,14 +29,14 @@ ImageView::ImageView(
     create_info.components.b = VK_COMPONENT_SWIZZLE_IDENTITY;
     create_info.components.a = VK_COMPONENT_SWIZZLE_IDENTITY;
 
-    if (vkCreateImageView(m_device.handle(), &create_info, nullptr, &m_image_view) != VK_SUCCESS) {
+    if (vkCreateImageView(m_device.handle(), &create_info, nullptr, &m_handle) != VK_SUCCESS) {
         throw std::runtime_error("failed to create texture image view!");
     }
 }
 
 ImageView::~ImageView() {
-    if (m_image_view == nullptr) return;
-    vkDestroyImageView(m_device.handle(), m_image_view, nullptr);
-    m_image_view = nullptr;
+    if (m_handle == nullptr) return;
+    vkDestroyImageView(m_device.handle(), m_handle, nullptr);
+    m_handle = nullptr;
 }
 } // namespace Vulkan

@@ -1,16 +1,16 @@
 #pragma once
 
-#include "Surface.hpp"
-#include "Vulkan.hpp"
-#include "Types.hpp"
+#include <Vulkan/Surface.hpp>
+#include <Vulkan/Vulkan.hpp>
+#include <Vulkan/Types.hpp>
 
 namespace Vulkan {
 class Surface;
 
 class Device final {
-    VULKAN_HANDLE(VkDevice, m_vk_device)
 private:
-    const VkPhysicalDevice m_vk_physical_device;
+    VkDevice               m_handle {};
+    const VkPhysicalDevice m_physical_device;
     const Surface&         m_surface;
 
     VkPhysicalDeviceFeatures   m_device_features {};
@@ -25,7 +25,7 @@ private:
     QueueFamilyIndices m_queue_indices;
 
 public:
-    NON_COPY(Device)
+    Device(Device&&) = delete;
     Device(
         VkPhysicalDevice                physical_device,
         const Surface&                  surface,
@@ -35,7 +35,8 @@ public:
     ~Device();
 
 public:
-    VkPhysicalDevice   vk_physical_device() const { return m_vk_physical_device; }
+    VkDevice           handle() const { return m_handle; }
+    VkPhysicalDevice   physical_device() const { return m_physical_device; }
     const Surface&     surface() const { return m_surface; }
     QueueFamilyIndices queue_family_indices() const { return m_queue_indices; }
 

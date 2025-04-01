@@ -1,19 +1,19 @@
 
-#include "SwapChain.hpp"
-#include "Device.hpp"
-#include "Enumerate.hpp"
-#include "Surface.hpp"
-#include "Instance.hpp"
-#include "Vulkan.hpp"
-#include "Window.hpp"
-#include "ImageView.hpp"
+#include <Vulkan/SwapChain.hpp>
+#include <Vulkan/Device.hpp>
+#include <Vulkan/Enumerate.hpp>
+#include <Vulkan/Surface.hpp>
+#include <Vulkan/Instance.hpp>
+#include <Vulkan/Vulkan.hpp>
+#include <Vulkan/Window.hpp>
+#include <Vulkan/ImageView.hpp>
 #include <cstdint>
 
 namespace Vulkan {
 
 SwapChain::SwapChain(const Device& device, const VkPresentModeKHR desired_mode):
     m_device(device),
-    m_vk_physical_device(device.vk_physical_device()) {
+    m_physical_device(device.physical_device()) {
     // 获取surface和windows
     const auto& surface = m_device.surface();
     const auto& window  = surface.instance().window();
@@ -60,10 +60,10 @@ SwapChain::SwapChain(const Device& device, const VkPresentModeKHR desired_mode):
     }
 
     // 创建交换链
-    VK_CHECK(vkCreateSwapchainKHR(m_device.handle(), &create_info, nullptr, &m_vk_swapchain), "create swap chain")
+    VK_CHECK(vkCreateSwapchainKHR(m_device.handle(), &create_info, nullptr, &m_handle), "create swap chain");
 
     // 枚举交换链图像
-    m_images = GetEnumerateVector(m_device.handle(), m_vk_swapchain, vkGetSwapchainImagesKHR);
+    m_images = GetEnumerateVector(m_device.handle(), m_handle, vkGetSwapchainImagesKHR);
 
     // 创建交换链图像视图
     m_image_views.reserve(m_images.size());
@@ -147,9 +147,9 @@ uint32_t SwapChain::ChooseImageCount(const VkSurfaceCapabilitiesKHR& capabilitie
 
 SwapChain::~SwapChain() {
     m_image_views.clear();
-    if (m_vk_swapchain == nullptr) return;
-    vkDestroySwapchainKHR(m_device.handle(), m_vk_swapchain, nullptr);
-    m_vk_swapchain = nullptr;
+    if (m_handle == nullptr) return;
+    vkDestroySwapchainKHR(m_device.handle(), m_handle, nullptr);
+    m_handle = nullptr;
 }
 
 } // namespace Vulkan

@@ -1,5 +1,5 @@
-#include "Window.hpp"
-#include "Types.hpp"
+#include <Vulkan/Window.hpp>
+#include <Vulkan/Types.hpp>
 
 namespace Vulkan {
 Window::Window(const WindowConfig& config): m_config(config) {

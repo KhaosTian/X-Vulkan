@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Vulkan.hpp"
+#include <Vulkan/Vulkan.hpp>
 
 namespace Vulkan {
 
@@ -8,17 +8,18 @@ class Instance;
 class Window;
 
 class Surface final {
-    VULKAN_HANDLE(VkSurfaceKHR, m_vk_surface)
 private:
     const Instance& m_instance;
-    VkSurfaceKHR    m_surface;
+    VkSurfaceKHR    m_handle;
 
 public:
-    NON_COPY(Surface)
+    Surface(Surface&&) = delete;
     explicit Surface(const Instance& instance);
     ~Surface();
 
 public:
+    VkSurfaceKHR handle() const { return m_handle; }
+
     const Instance& instance() const { return m_instance; }
 };
 

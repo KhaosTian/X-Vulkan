@@ -1,8 +1,8 @@
 #pragma once
 
-#include "GLFW/glfw3.h"
-#include "Types.hpp"
-#include "Vulkan.hpp"
+#include <GLFW/glfw3.h>
+#include <Vulkan/Types.hpp>
+#include <Vulkan/Vulkan.hpp>
 
 #include <functional>
 
@@ -10,16 +10,17 @@ namespace Vulkan {
 class WindowConfig;
 
 class Window final {
-    VULKAN_HANDLE(GLFWwindow*, m_window)
 private:
     WindowConfig m_config;
+    GLFWwindow*  m_handle {};
 
 public:
-    NON_COPY(Window)
+    Window(Window&&) = delete;
     explicit Window(const WindowConfig& config);
     ~Window();
 
 public:
+    GLFWwindow*         handle() const { return m_handle; }
     const WindowConfig& config() const { return m_config; }
 
     VkExtent2D               GetWindowSize() const;
