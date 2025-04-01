@@ -19,7 +19,7 @@ SwapChain::SwapChain(const Device& device, const VkPresentModeKHR desired_mode):
     const auto& window  = surface.instance().window();
 
     // 构建创建swapchain所需的config
-    const auto details      = QuerySwapChainSupport(surface.handle());
+    const auto details      = QuerySwapChainSupport(device.physical_device(), surface.handle());
     m_config.surface_format = ChooseSwapSurfaceFormat(details.formats);
     m_config.present_mode   = ChooseSwapPresentMode(details.present_modes, desired_mode);
     m_config.extent         = ChooseSwapExtent(window, details.capabilities);

@@ -1,15 +1,18 @@
-#include "Vulkan/Vulkan.hpp"
+#include <Vulkan/Exception.hpp>
+#include <Vulkan/Vulkan.hpp>
 #include <Vulkan/Memory/DeviceMemory.hpp>
 #include <Vulkan/Device.hpp>
+#include <cstdint>
+#include <stdexcept>
 
 namespace Vulkan {
 
 DeviceMemory::DeviceMemory(
-    const Device&               device,
-    const size_t                size,
-    const uint32_t              memory_type_bits,
-    const VkMemoryAllocateFlags allocate_flags,
-    const VkMemoryPropertyFlags property_flags
+    const Device&         device,
+    size_t                size,
+    uint32_t              memory_type_bits,
+    VkMemoryAllocateFlags allocate_flags,
+    VkMemoryPropertyFlags property_flags
 ):
     m_device(device) {
     VkMemoryAllocateFlagsInfo flags_info = {};
@@ -41,7 +44,17 @@ DeviceMemory::~DeviceMemory() {
 uint32_t DeviceMemory::FindMemopryType(uint32_t type_filter, VkMemoryPropertyFlags property_flags) const {
     VkPhysicalDeviceMemoryProperties properties;
     vkGetPhysicalDeviceMemoryProperties(m_device.physical_device(), &properties);
+    // 分配内存时需要指定内存类型，type_filter按位标记了允许的内从类型，flags则标记了其必备的属性组合
+    for (uint32_t i = 0; i != properties.memoryTypeCount; ++i) {
+        //通过filter捕获符合要求的内存类型，通过flags查询内存属性是否支持所有特性
+        if ((type_filter & (1 << i)) && (properties.memoryTypes[i].propertyFlags & property_flags) == property_flags) {
+            return i;
+        }
+    }
+
+    Throw(std::runtime_error("failed to find susitable memory type"));
 }
+
 void* DeviceMemory::Map(size_t offset, size_t size) {
     void* data;
     VK_CHECK(vkMapMemory(m_device.handle(), m_handle, offset, size, 0, &data), "map memory");

@@ -40,6 +40,10 @@ public:
     const Surface&     surface() const { return m_surface; }
     QueueFamilyIndices queue_family_indices() const { return m_queue_indices; }
 
+    VkQueue graphics_queue() const { return m_queue_graphics; }
+    VkQueue present_queue() const { return m_queue_present; }
+    VkQueue compute_queue() const { return m_queue_compute; }
+
     void WaitIdle() const;
 
 private:

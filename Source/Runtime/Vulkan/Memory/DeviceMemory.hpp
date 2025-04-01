@@ -11,11 +11,11 @@ private:
 
 public:
     explicit DeviceMemory(
-        const Device&               device,
-        const size_t                size,
-        const uint32_t              memory_type_bits,
-        const VkMemoryAllocateFlags allocate_flags,
-        const VkMemoryPropertyFlags propertyFlags
+        const Device&         device,
+        size_t                size,
+        uint32_t              memory_type_bits,
+        VkMemoryAllocateFlags allocate_flags,
+        VkMemoryPropertyFlags property_flags
     );
     DeviceMemory(DeviceMemory&& other) noexcept;
     ~DeviceMemory();
