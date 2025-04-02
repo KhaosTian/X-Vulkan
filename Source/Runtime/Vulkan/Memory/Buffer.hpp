@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Vulkan/Memory/DeviceMemory.hpp"
 #include <Vulkan/Vulkan.hpp>
 
 namespace Vulkan {
@@ -18,6 +17,7 @@ public:
     Buffer(const Device& device, size_t size, VkBufferUsageFlags usage);
     ~Buffer();
 
+    VkBuffer      handle() const { return m_handle; }
     const Device& device() const { return m_device; }
 
     DeviceMemory         AllocateMemory(VkMemoryPropertyFlags property_flags);
@@ -25,8 +25,8 @@ public:
     VkMemoryRequirements GetMemoryRequirements() const;
     VkDeviceAddress      GetDeviceAddress() const;
 
-    void CopyForm();
-    void CopyTo();
+    void CopyFrom(CommandPool& cmd_pool, const Buffer& src, VkDeviceSize size);
+    void CopyTo(CommandPool& cmd_pool, const Buffer& dst, VkDeviceSize size);
 };
 
 } // namespace Vulkan
