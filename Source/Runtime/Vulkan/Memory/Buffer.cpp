@@ -1,4 +1,3 @@
-#include "Vulkan/Vulkan.hpp"
 #include <Vulkan/Memory/Buffer.hpp>
 #include <Vulkan/Memory/DeviceMemory.hpp>
 #include <Vulkan/Command/CommandBuffer.hpp>
