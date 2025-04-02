@@ -16,7 +16,7 @@ private:
 
 public:
     Instance(Instance&&) = delete;
-    explicit Instance(const Window& window, const std::vector<const char*>& validationLayers);
+    Instance(const Window& window, const std::vector<const char*>& validationLayers);
     ~Instance();
 
 public:

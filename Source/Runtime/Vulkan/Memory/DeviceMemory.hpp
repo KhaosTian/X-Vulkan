@@ -10,7 +10,7 @@ private:
     const Device&  m_device;
 
 public:
-    explicit DeviceMemory(
+    DeviceMemory(
         const Device&         device,
         size_t                size,
         uint32_t              memory_type_bits,

@@ -38,7 +38,7 @@ public:
     DeviceMemory         AllocateMemory(VkMemoryPropertyFlags property_flags) const;
     VkMemoryRequirements GetMemoryRequirements() const;
 
-    void CopyFrom(CommandPool& cmd_pool, const Buffer& src);
+    void CopyFrom(CommandPool& cmd_pool, const Buffer& buffer);
     void TransitionImageLayout(CommandPool& cmd_pool, VkImageLayout layout);
 };
 
