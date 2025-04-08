@@ -9,6 +9,7 @@
 #include <iostream>
 #include <string>
 #include <cstdint>
+#include <array>
 
 #ifndef NOMINMAX
     #define NOMINMAX

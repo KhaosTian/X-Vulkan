@@ -25,10 +25,4 @@ struct SwapchainSupportDetails {
     std::vector<VkPresentModeKHR>   present_modes;
 };
 
-struct SwapchainConfig {
-    VkSurfaceFormatKHR surface_format;
-    VkPresentModeKHR   present_mode;
-    VkExtent2D         extent;
-    uint32_t           image_count;
-};
 } // namespace Vulkan

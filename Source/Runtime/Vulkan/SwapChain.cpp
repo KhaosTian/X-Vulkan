@@ -6,7 +6,7 @@
 #include "Vulkan/Instance.hpp"
 #include "Vulkan/Vulkan.hpp"
 #include "Vulkan/Window.hpp"
-#include "Vulkan/ImageView.hpp"
+#include "Vulkan/Memory/ImageView.hpp"
 #include <cstdint>
 
 namespace Vulkan {
@@ -19,24 +19,24 @@ SwapChain::SwapChain(const Device& device, const VkPresentModeKHR desired_mode):
     const auto& window  = surface.instance().window();
 
     // 构建创建swapchain所需的config
-    const auto details      = QuerySwapChainSupport(device.physical_device(), surface.handle());
-    m_config.surface_format = ChooseSwapSurfaceFormat(details.formats);
-    m_config.present_mode   = ChooseSwapPresentMode(details.present_modes, desired_mode);
-    m_config.extent         = ChooseSwapExtent(window, details.capabilities);
-    m_config.image_count    = ChooseImageCount(details.capabilities);
+    const auto details             = QuerySwapChainSupport(device.physical_device(), surface.handle());
+    const auto surface_format      = ChooseSwapSurfaceFormat(details.formats);
+    const auto actual_present_mode = ChooseSwapPresentMode(details.present_modes, desired_mode);
+    const auto extent              = ChooseSwapExtent(window, details.capabilities);
+    const auto image_count         = ChooseImageCount(details.capabilities);
 
     // 创建交换链创建信息
     VkSwapchainCreateInfoKHR create_info = {};
     create_info.sType                    = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
     create_info.surface                  = surface.handle();
-    create_info.presentMode              = m_config.present_mode;
-    create_info.minImageCount            = m_config.image_count;
-    create_info.imageFormat              = m_config.surface_format.format;
-    create_info.imageColorSpace          = m_config.surface_format.colorSpace;
+    create_info.presentMode              = actual_present_mode;
+    create_info.minImageCount            = image_count;
+    create_info.imageFormat              = surface_format.format;
+    create_info.imageColorSpace          = surface_format.colorSpace;
 
     create_info.imageArrayLayers = 1;
     create_info.imageUsage       = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
-    create_info.imageExtent      = m_config.extent;
+    create_info.imageExtent      = extent;
 
     create_info.preTransform   = details.capabilities.currentTransform;
     create_info.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
@@ -69,7 +69,7 @@ SwapChain::SwapChain(const Device& device, const VkPresentModeKHR desired_mode):
     m_image_views.reserve(m_images.size());
     for (const auto& image: m_images) {
         m_image_views.emplace_back(
-            std::make_unique<ImageView>(m_device, image, m_config.surface_format.format, VK_IMAGE_ASPECT_COLOR_BIT)
+            std::make_unique<ImageView>(m_device, image, surface_format.format, VK_IMAGE_ASPECT_COLOR_BIT)
         );
     }
 }

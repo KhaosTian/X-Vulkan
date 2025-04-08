@@ -4,27 +4,43 @@
 
 namespace Vulkan {
 class DepthBuffer;
-class Swapchain;
+class SwapChain;
 
 class RenderPass final {
 private:
-    const Swapchain& m_swapchain;
-    RenderPass       m_handle;
+    const SwapChain&   m_swap_chain;
+    const DepthBuffer& m_depth_buffer;
+    VkRenderPass       m_handle;
 
 public:
     RenderPass(RenderPass&&) = delete;
-    RenderPass(const Swapchain& swapchain, VkExtent2D extent, uint32_t mip_level, VkFormat format);
-    RenderPass(const ImageView& image_view, const RenderPass& render_pass);
+
+    RenderPass(const SwapChain& swap_chain, const DepthBuffer& depth_buffer, VkAttachmentLoadOp color_buffer_load_op);
+    RenderPass(
+        const SwapChain&   swap_chain,
+        const DepthBuffer& depth_buffer,
+        VkAttachmentLoadOp color_buffer_load_op,
+        VkAttachmentLoadOp depth_buffer_load_op
+    );
+    RenderPass(
+        const SwapChain&   swap_chain,
+        VkFormat           format,
+        const DepthBuffer& depth_buffer,
+        VkAttachmentLoadOp color_buffer_load_op
+    );
+    RenderPass(
+        const SwapChain&   swap_chain,
+        VkFormat           format,
+        VkFormat           format1,
+        VkFormat           format2,
+        const DepthBuffer& depth_buffer,
+        VkAttachmentLoadOp color_buffer_load_op
+    );
     ~RenderPass();
 
-    RenderPass    handle() const { return m_handle; }
-    const Device& device() const { return m_swapchain; }
-
-    DeviceMemory         AllocateMemory(VkMemoryPropertyFlags property_flags) const;
-    VkMemoryRequirements GetMemoryRequirements() const;
-
-    void CopyFrom(CommandPool& cmd_pool, const Buffer& buffer);
-    void TransitionImageLayout(CommandPool& cmd_pool, VkImageLayout layout);
+    VkRenderPass       handle() const { return m_handle; }
+    const SwapChain&   swap_chain() const { return m_swap_chain; }
+    const DepthBuffer& depth_buffer() const { return m_depth_buffer; }
 };
 
 } // namespace Vulkan
