@@ -26,7 +26,8 @@ public:
         const SwapChain&   swap_chain,
         VkFormat           format,
         const DepthBuffer& depth_buffer,
-        VkAttachmentLoadOp color_buffer_load_op
+        VkAttachmentLoadOp color_buffer_load_op,
+        VkAttachmentLoadOp depth_buffer_load_op
     );
     RenderPass(
         const SwapChain&   swap_chain,
@@ -34,7 +35,8 @@ public:
         VkFormat           format1,
         VkFormat           format2,
         const DepthBuffer& depth_buffer,
-        VkAttachmentLoadOp color_buffer_load_op
+        VkAttachmentLoadOp color_buffer_load_op,
+        VkAttachmentLoadOp depth_buffer_load_op
     );
     ~RenderPass();
 
