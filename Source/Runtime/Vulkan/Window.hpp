@@ -1,8 +1,8 @@
 #pragma once
 
 #include <GLFW/glfw3.h>
-#include <Vulkan/Types.hpp>
-#include <Vulkan/Vulkan.hpp>
+#include "Vulkan/Types.hpp"
+#include "Vulkan/Vulkan.hpp"
 
 #include <functional>
 

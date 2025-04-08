@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Vulkan/Vulkan.hpp>
+#include "Vulkan/Vulkan.hpp"
 #include <cstdint>
 
 namespace Vulkan {
@@ -38,8 +38,9 @@ public:
     DeviceMemory         AllocateMemory(VkMemoryPropertyFlags property_flags) const;
     VkMemoryRequirements GetMemoryRequirements() const;
 
-    void CopyFrom(CommandPool& cmd_pool, const Buffer& buffer);
-    void TransitionImageLayout(CommandPool& cmd_pool, VkImageLayout layout);
+    void        CopyFrom(CommandPool& cmd_pool, const Buffer& buffer);
+    void        TransitionImageLayout(CommandPool& cmd_pool, VkImageLayout layout);
+    static bool HasStencilComponent(const VkFormat format);
 };
 
 } // namespace Vulkan

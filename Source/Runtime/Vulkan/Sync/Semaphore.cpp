@@ -1,5 +1,5 @@
-#include <Vulkan/Sync/Semaphore.hpp>
-#include <Vulkan/Device.hpp>
+#include "Vulkan/Sync/Semaphore.hpp"
+#include "Vulkan/Device.hpp"
 
 namespace Vulkan {
 Semaphore::Semaphore(const Device& device): m_device(device) {
