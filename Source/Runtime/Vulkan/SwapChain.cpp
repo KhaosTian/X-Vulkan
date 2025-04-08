@@ -1,5 +1,5 @@
 
-#include "Vulkan/SwapChain.hpp"
+#include "Vulkan/Swapchain.hpp"
 #include "Vulkan/Device.hpp"
 #include "Vulkan/Enumerate.hpp"
 #include "Vulkan/Surface.hpp"
@@ -11,15 +11,15 @@
 
 namespace Vulkan {
 
-SwapChain::SwapChain(const Device& device, const VkPresentModeKHR desired_mode):
+Swapchain::Swapchain(const Device& device, const VkPresentModeKHR desired_mode):
     m_device(device),
     m_physical_device(device.physical_device()) {
     // 获取surface和windows
     const auto& surface = m_device.surface();
     const auto& window  = surface.instance().window();
 
-    // 构建创建swapchain所需的config
-    const auto details             = QuerySwapChainSupport(device.physical_device(), surface.handle());
+    // 构建创建Swapchain所需的config
+    const auto details             = QuerySwapchainSupport(device.physical_device(), surface.handle());
     const auto surface_format      = ChooseSwapSurfaceFormat(details.formats);
     const auto actual_present_mode = ChooseSwapPresentMode(details.present_modes, desired_mode);
     const auto extent              = ChooseSwapExtent(window, details.capabilities);
@@ -27,7 +27,7 @@ SwapChain::SwapChain(const Device& device, const VkPresentModeKHR desired_mode):
 
     // 创建交换链创建信息
     VkSwapchainCreateInfoKHR create_info = {};
-    create_info.sType                    = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
+    create_info.sType                    = VK_STRUCTURE_TYPE_Swapchain_CREATE_INFO_KHR;
     create_info.surface                  = surface.handle();
     create_info.presentMode              = actual_present_mode;
     create_info.minImageCount            = image_count;
@@ -74,7 +74,7 @@ SwapChain::SwapChain(const Device& device, const VkPresentModeKHR desired_mode):
     }
 }
 
-SwapchainSupportDetails SwapChain::QuerySwapChainSupport(VkPhysicalDevice physical_device, const VkSurfaceKHR surface) {
+SwapchainSupportDetails Swapchain::QuerySwapchainSupport(VkPhysicalDevice physical_device, const VkSurfaceKHR surface) {
     SwapchainSupportDetails details = {};
     // 枚举capabilities
     vkGetPhysicalDeviceSurfaceCapabilitiesKHR(physical_device, surface, &details.capabilities);
@@ -85,7 +85,7 @@ SwapchainSupportDetails SwapChain::QuerySwapChainSupport(VkPhysicalDevice physic
     return details;
 }
 
-VkSurfaceFormatKHR SwapChain::ChooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& surface_formats) {
+VkSurfaceFormatKHR Swapchain::ChooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& surface_formats) {
     // 优先选择B8G8R8A8_SRGB 和 SRGB_NONLINEAR_KHR
     for (const auto& surface_format: surface_formats) {
         if (surface_format.format == VK_FORMAT_B8G8R8A8_SRGB &&
@@ -97,7 +97,7 @@ VkSurfaceFormatKHR SwapChain::ChooseSwapSurfaceFormat(const std::vector<VkSurfac
     return surface_formats.front();
 }
 
-VkPresentModeKHR SwapChain::ChooseSwapPresentMode(
+VkPresentModeKHR Swapchain::ChooseSwapPresentMode(
     const std::vector<VkPresentModeKHR>& present_modes,
     const VkPresentModeKHR               desired_mode
 ) {
@@ -117,7 +117,7 @@ VkPresentModeKHR SwapChain::ChooseSwapPresentMode(
     return present_modes.front();
 }
 
-VkExtent2D SwapChain::ChooseSwapExtent(const Window& window, const VkSurfaceCapabilitiesKHR& capabilities) {
+VkExtent2D Swapchain::ChooseSwapExtent(const Window& window, const VkSurfaceCapabilitiesKHR& capabilities) {
     // 只有当前宽高为UINT32_MAX时，才表示宽高可以由我们自己决定
     if (capabilities.currentExtent.width != UINT32_MAX) {
         return capabilities.currentExtent;
@@ -136,7 +136,7 @@ VkExtent2D SwapChain::ChooseSwapExtent(const Window& window, const VkSurfaceCapa
     return actual_extent;
 }
 
-uint32_t SwapChain::ChooseImageCount(const VkSurfaceCapabilitiesKHR& capabilities) {
+uint32_t Swapchain::ChooseImageCount(const VkSurfaceCapabilitiesKHR& capabilities) {
     // 选择图像数量,至少为1，最大为表面支持的最大图像数量
     uint32_t image_count = capabilities.minImageCount + 1;
     if (capabilities.maxImageCount > 0 && image_count > capabilities.maxImageCount) {
@@ -145,7 +145,7 @@ uint32_t SwapChain::ChooseImageCount(const VkSurfaceCapabilitiesKHR& capabilitie
     return image_count;
 }
 
-SwapChain::~SwapChain() {
+Swapchain::~Swapchain() {
     m_image_views.clear();
     if (m_handle == nullptr) return;
     vkDestroySwapchainKHR(m_device.handle(), m_handle, nullptr);

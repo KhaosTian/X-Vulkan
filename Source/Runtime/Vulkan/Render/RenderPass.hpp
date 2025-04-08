@@ -4,33 +4,33 @@
 
 namespace Vulkan {
 class DepthBuffer;
-class SwapChain;
+class Swapchain;
 
 class RenderPass final {
 private:
-    const SwapChain&   m_swap_chain;
+    const Swapchain&   m_swapchain;
     const DepthBuffer& m_depth_buffer;
     VkRenderPass       m_handle;
 
 public:
     RenderPass(RenderPass&&) = delete;
 
-    RenderPass(const SwapChain& swap_chain, const DepthBuffer& depth_buffer, VkAttachmentLoadOp color_buffer_load_op);
+    RenderPass(const Swapchain& swapchain, const DepthBuffer& depth_buffer, VkAttachmentLoadOp color_buffer_load_op);
     RenderPass(
-        const SwapChain&   swap_chain,
+        const Swapchain&   swapchain,
         const DepthBuffer& depth_buffer,
         VkAttachmentLoadOp color_buffer_load_op,
         VkAttachmentLoadOp depth_buffer_load_op
     );
     RenderPass(
-        const SwapChain&   swap_chain,
+        const Swapchain&   swapchain,
         VkFormat           format,
         const DepthBuffer& depth_buffer,
         VkAttachmentLoadOp color_buffer_load_op,
         VkAttachmentLoadOp depth_buffer_load_op
     );
     RenderPass(
-        const SwapChain&   swap_chain,
+        const Swapchain&   swapchain,
         VkFormat           format,
         VkFormat           format1,
         VkFormat           format2,
@@ -41,7 +41,7 @@ public:
     ~RenderPass();
 
     VkRenderPass       handle() const { return m_handle; }
-    const SwapChain&   swap_chain() const { return m_swap_chain; }
+    const Swapchain&   swapchain() const { return m_swapchain; }
     const DepthBuffer& depth_buffer() const { return m_depth_buffer; }
 };
 

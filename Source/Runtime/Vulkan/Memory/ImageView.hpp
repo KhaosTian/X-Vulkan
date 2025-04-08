@@ -9,7 +9,8 @@ public:
     ~ImageView();
     ImageView(ImageView&&) = delete;
 
-    VkImageView handle() const { return m_handle; }
+    VkImageView   handle() const { return m_handle; }
+    const Device& device() const { return m_device; }
 
 private:
     VkImageView   m_handle { nullptr };

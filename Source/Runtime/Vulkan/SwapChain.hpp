@@ -10,7 +10,7 @@ class Device;
 class ImageView;
 class Window;
 
-class SwapChain final {
+class Swapchain final {
 private:
     VkSwapchainKHR                          m_handle {};
     const Device&                           m_device;
@@ -24,9 +24,9 @@ private:
     uint32_t         m_mini_image_count;
 
 public:
-    SwapChain(SwapChain&&) = delete;
-    SwapChain(const Device& device, const VkPresentModeKHR present_mode);
-    ~SwapChain();
+    Swapchain(Swapchain&&) = delete;
+    Swapchain(const Device& device, const VkPresentModeKHR present_mode);
+    ~Swapchain();
 
 public:
     VkSwapchainKHR                                 handle() const { return m_handle; }
@@ -38,9 +38,10 @@ public:
     const std::vector<VkImage>&                    images() { return m_images; }
     const std::vector<std::unique_ptr<ImageView>>& image_views() { return m_image_views; }
     uint32_t                                       mini_image_count() { return m_mini_image_count; }
+    const VkExtent2D                               extent() const { return m_extent; }
 
 private:
-    static SwapchainSupportDetails QuerySwapChainSupport(VkPhysicalDevice physicalDevice, const VkSurfaceKHR surface);
+    static SwapchainSupportDetails QuerySwapchainSupport(VkPhysicalDevice physicalDevice, const VkSurfaceKHR surface);
     static VkSurfaceFormatKHR      ChooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& surface_formats);
     static VkPresentModeKHR
     ChooseSwapPresentMode(const std::vector<VkPresentModeKHR>& present_modes, const VkPresentModeKHR desired_mode);

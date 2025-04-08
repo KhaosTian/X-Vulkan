@@ -1,6 +1,6 @@
 #include "Vulkan/Render/RenderPass.hpp"
 #include "RenderPass.hpp"
-#include "Vulkan/SwapChain.hpp"
+#include "Vulkan/Swapchain.hpp"
 #include "Vulkan/Memory/DepthBuffer.hpp"
 #include "Vulkan/Device.hpp"
 #include "Vulkan/Vulkan.hpp"
@@ -10,14 +10,14 @@
 
 namespace Vulkan {
 RenderPass::RenderPass(
-    const SwapChain&   swap_chain,
+    const Swapchain&   swapchain,
     const DepthBuffer& depth_buffer,
     VkAttachmentLoadOp color_buffer_load_op
 ):
-    m_swap_chain(swap_chain),
+    m_swapchain(swapchain),
     m_depth_buffer((depth_buffer)) {
     VkAttachmentDescription color_attachment = {};
-    color_attachment.format                  = swap_chain.format();
+    color_attachment.format                  = swapchain.format();
     color_attachment.samples                 = VK_SAMPLE_COUNT_1_BIT;
     color_attachment.loadOp                  = color_buffer_load_op;
     color_attachment.storeOp                 = VK_ATTACHMENT_STORE_OP_STORE;
@@ -58,18 +58,18 @@ RenderPass::RenderPass(
     create_info.dependencyCount        = 1;
     create_info.pDependencies          = &dependency;
 
-    VK_CHECK(vkCreateRenderPass(swap_chain.device().handle(), &create_info, nullptr, &m_handle), "create render pass");
+    VK_CHECK(vkCreateRenderPass(swapchain.device().handle(), &create_info, nullptr, &m_handle), "create render pass");
 }
 RenderPass::RenderPass(
-    const SwapChain&   swap_chain,
+    const Swapchain&   swapchain,
     const DepthBuffer& depth_buffer,
     VkAttachmentLoadOp color_buffer_load_op,
     VkAttachmentLoadOp depth_buffer_load_op
 ):
-    m_swap_chain(swap_chain),
+    m_swapchain(swapchain),
     m_depth_buffer((depth_buffer)) {
     VkAttachmentDescription color_attachment = {};
-    color_attachment.format                  = swap_chain.format();
+    color_attachment.format                  = swapchain.format();
     color_attachment.samples                 = VK_SAMPLE_COUNT_1_BIT;
     color_attachment.loadOp                  = color_buffer_load_op;
     color_attachment.storeOp                 = VK_ATTACHMENT_STORE_OP_STORE;
@@ -128,16 +128,16 @@ RenderPass::RenderPass(
     create_info.dependencyCount        = 1;
     create_info.pDependencies          = &dependency;
 
-    VK_CHECK(vkCreateRenderPass(swap_chain.device().handle(), &create_info, nullptr, &m_handle), "create render pass");
+    VK_CHECK(vkCreateRenderPass(swapchain.device().handle(), &create_info, nullptr, &m_handle), "create render pass");
 }
 RenderPass::RenderPass(
-    const SwapChain&   swap_chain,
+    const Swapchain&   swapchain,
     VkFormat           format,
     const DepthBuffer& depth_buffer,
     VkAttachmentLoadOp color_buffer_load_op,
     VkAttachmentLoadOp depth_buffer_load_op
 ):
-    m_swap_chain(swap_chain),
+    m_swapchain(swapchain),
     m_depth_buffer((depth_buffer)) {
     VkAttachmentDescription color_attachment = {};
     color_attachment.format                  = format;
@@ -199,10 +199,10 @@ RenderPass::RenderPass(
     create_info.dependencyCount        = 1;
     create_info.pDependencies          = &dependency;
 
-    VK_CHECK(vkCreateRenderPass(swap_chain.device().handle(), &create_info, nullptr, &m_handle), "create render pass");
+    VK_CHECK(vkCreateRenderPass(swapchain.device().handle(), &create_info, nullptr, &m_handle), "create render pass");
 }
 RenderPass::RenderPass(
-    const SwapChain&   swap_chain,
+    const Swapchain&   swapchain,
     VkFormat           format,
     VkFormat           format1,
     VkFormat           format2,
@@ -210,7 +210,7 @@ RenderPass::RenderPass(
     VkAttachmentLoadOp color_buffer_load_op,
     VkAttachmentLoadOp depth_buffer_load_op
 ):
-    m_swap_chain(swap_chain),
+    m_swapchain(swapchain),
     m_depth_buffer((depth_buffer)) {
     VkAttachmentDescription color_attachment = {};
     color_attachment.format                  = format;
@@ -298,12 +298,12 @@ RenderPass::RenderPass(
     create_info.dependencyCount        = 1;
     create_info.pDependencies          = &dependency;
 
-    VK_CHECK(vkCreateRenderPass(swap_chain.device().handle(), &create_info, nullptr, &m_handle), "create render pass");
+    VK_CHECK(vkCreateRenderPass(swapchain.device().handle(), &create_info, nullptr, &m_handle), "create render pass");
 }
 
 RenderPass::~RenderPass() {
     if (m_handle == nullptr) return;
-    vkDestroyRenderPass(m_swap_chain.device().handle(), m_handle, nullptr);
+    vkDestroyRenderPass(m_swapchain.device().handle(), m_handle, nullptr);
     m_handle = nullptr;
 }
 } // namespace Vulkan

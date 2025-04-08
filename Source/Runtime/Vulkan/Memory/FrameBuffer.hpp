@@ -1,33 +1,30 @@
 #pragma once
 
-#include "Vulkan/Memory/ImageView.hpp"
 #include "Vulkan/Vulkan.hpp"
 
 namespace Vulkan {
-class CommandPool;
+class ImageView;
+class RenderPass;
 class Device;
-class Buffer;
-class DeviceMemory;
 
-class FrameBuffer final {
+class Framebuffer final {
 private:
     const Device& m_device;
-    FrameBuffer   m_handle;
+    VkFramebuffer m_handle;
 
 public:
-    FrameBuffer(FrameBuffer&&) noexcept;
-    FrameBuffer(const Device& device, VkExtent2D extent, uint32_t mip_level, VkFormat format);
-    FrameBuffer(const ImageView& image_view, const RenderPass& render_pass);
-    ~FrameBuffer();
+    Framebuffer(Framebuffer&&) noexcept;
+    Framebuffer(const ImageView& image_view, const RenderPass& render_pass, bool with_ds);
+    Framebuffer(
+        const ImageView&  image_view,
+        const ImageView&  image_view1,
+        const ImageView&  image_view2,
+        const RenderPass& render_pass
+    );
+    ~Framebuffer();
 
-    FrameBuffer   handle() const { return m_handle; }
+    VkFramebuffer handle() const { return m_handle; }
     const Device& device() const { return m_device; }
-
-    DeviceMemory         AllocateMemory(VkMemoryPropertyFlags property_flags) const;
-    VkMemoryRequirements GetMemoryRequirements() const;
-
-    void CopyFrom(CommandPool& cmd_pool, const Buffer& buffer);
-    void TransitionImageLayout(CommandPool& cmd_pool, VkImageLayout layout);
 };
 
 } // namespace Vulkan
