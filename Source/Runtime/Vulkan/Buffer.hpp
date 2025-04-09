@@ -26,8 +26,8 @@ private:
     VkDeviceAddress      GetDeviceAddress() const;
 
 public:
-    DeviceMemory AllocateMemory(VkMemoryPropertyFlags property_flags);
-    DeviceMemory AllocateMemory(VkMemoryAllocateFlags allocate_flags, VkMemoryPropertyFlags property_flags);
+    DeviceMemory AllocateMemory(VkMemoryPropertyFlags property);
+    DeviceMemory AllocateMemory(VkMemoryAllocateFlags allocate, VkMemoryPropertyFlags property);
     void         CopyFrom(CommandPool& cmd_pool, const Buffer& src, VkDeviceSize size);
     void         CopyTo(CommandPool& cmd_pool, const Buffer& dst, VkDeviceSize size);
 };

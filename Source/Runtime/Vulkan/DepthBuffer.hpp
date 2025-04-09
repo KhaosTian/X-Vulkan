@@ -30,7 +30,7 @@ private:
         const Device&                device,
         const std::vector<VkFormat>& candidates,
         const VkImageTiling          tiling,
-        const VkFormatFeatureFlags   feature_flags
+        const VkFormatFeatureFlags   feature
     );
 };
 

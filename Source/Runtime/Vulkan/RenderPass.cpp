@@ -1,7 +1,7 @@
 #include "Vulkan/Render/RenderPass.hpp"
 #include "RenderPass.hpp"
 #include "Vulkan/Swapchain.hpp"
-#include "Vulkan/Memory/DepthBuffer.hpp"
+#include "Vulkan/DepthBuffer.hpp"
 #include "Vulkan/Device.hpp"
 #include "Vulkan/Vulkan.hpp"
 #include <array>

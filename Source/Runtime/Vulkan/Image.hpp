@@ -26,7 +26,7 @@ public:
         uint32_t          mip_level,
         VkFormat          format,
         VkImageTiling     tiling,
-        VkImageUsageFlags usage_flags
+        VkImageUsageFlags usage
     );
     ~Image();
 
@@ -35,7 +35,7 @@ public:
     VkExtent2D    extent() const { return m_extent; }
     VkFormat      format() const { return m_format; }
 
-    DeviceMemory         AllocateMemory(VkMemoryPropertyFlags property_flags) const;
+    DeviceMemory         AllocateMemory(VkMemoryPropertyFlags property) const;
     VkMemoryRequirements GetMemoryRequirements() const;
 
     void        CopyFrom(CommandPool& cmd_pool, const Buffer& buffer);

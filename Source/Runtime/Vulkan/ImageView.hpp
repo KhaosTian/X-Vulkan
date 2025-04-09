@@ -5,7 +5,7 @@ namespace Vulkan {
 class Device;
 class ImageView final {
 public:
-    ImageView(const Device& device, const VkImage image, const VkFormat format, const VkImageAspectFlags aspect_flags);
+    ImageView(const Device& device, const VkImage image, const VkFormat format, const VkImageAspectFlags aspect);
     ~ImageView();
     ImageView(ImageView&&) = delete;
 

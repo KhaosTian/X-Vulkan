@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Vulkan/Vulkan.hpp"
-#include "Vulkan/Types.hpp"
+
 #include <cstdint>
 #include <vector>
 
@@ -9,6 +9,12 @@ namespace Vulkan {
 class Device;
 class ImageView;
 class Window;
+
+struct SwapchainSupportDetails {
+    VkSurfaceCapabilitiesKHR        capabilities;
+    std::vector<VkSurfaceFormatKHR> formats;
+    std::vector<VkPresentModeKHR>   present_modes;
+};
 
 class Swapchain final {
 private:

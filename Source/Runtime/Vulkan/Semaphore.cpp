@@ -1,4 +1,4 @@
-#include "Vulkan/Sync/Semaphore.hpp"
+#include "Vulkan/Semaphore.hpp"
 #include "Vulkan/Device.hpp"
 
 namespace Vulkan {

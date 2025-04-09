@@ -1,15 +1,10 @@
 #include "Vulkan/Vulkan.hpp"
-#include "Vulkan/Memory/ImageView.hpp"
+#include "Vulkan/ImageView.hpp"
 #include "Vulkan/Device.hpp"
 
 namespace Vulkan {
 
-ImageView::ImageView(
-    const Device&            device,
-    const VkImage            image,
-    const VkFormat           format,
-    const VkImageAspectFlags aspect_flags
-):
+ImageView::ImageView(const Device& device, const VkImage image, const VkFormat format, const VkImageAspectFlags aspect):
     m_device(device) {
     VkImageViewCreateInfo create_info = {};
     create_info.sType                 = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
@@ -18,7 +13,7 @@ ImageView::ImageView(
     create_info.format                = format;
 
     // subresourceRange
-    create_info.subresourceRange.aspectMask     = aspect_flags;
+    create_info.subresourceRange.aspectMask     = aspect;
     create_info.subresourceRange.baseMipLevel   = 0;
     create_info.subresourceRange.levelCount     = 1;
     create_info.subresourceRange.baseArrayLayer = 0;

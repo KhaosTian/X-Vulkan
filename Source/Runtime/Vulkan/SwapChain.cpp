@@ -6,7 +6,7 @@
 #include "Vulkan/Instance.hpp"
 #include "Vulkan/Vulkan.hpp"
 #include "Vulkan/Window.hpp"
-#include "Vulkan/Memory/ImageView.hpp"
+#include "Vulkan/ImageView.hpp"
 #include <cstdint>
 
 namespace Vulkan {
@@ -27,7 +27,7 @@ Swapchain::Swapchain(const Device& device, const VkPresentModeKHR desired_mode):
 
     // 创建交换链创建信息
     VkSwapchainCreateInfoKHR create_info = {};
-    create_info.sType                    = VK_STRUCTURE_TYPE_Swapchain_CREATE_INFO_KHR;
+    create_info.sType                    = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
     create_info.surface                  = surface.handle();
     create_info.presentMode              = actual_present_mode;
     create_info.minImageCount            = image_count;

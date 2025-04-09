@@ -1,13 +1,17 @@
 #pragma once
 
 #include <GLFW/glfw3.h>
-#include "Vulkan/Types.hpp"
 #include "Vulkan/Vulkan.hpp"
-
 #include <functional>
 
 namespace Vulkan {
-class WindowConfig;
+struct WindowConfig {
+    uint32_t    width;
+    uint32_t    height;
+    std::string title;
+    bool        is_fullscreen;
+    bool        enable_resize;
+};
 
 class Window final {
 private:

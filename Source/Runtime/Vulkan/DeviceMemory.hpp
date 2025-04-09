@@ -14,8 +14,8 @@ public:
         const Device&         device,
         size_t                size,
         uint32_t              memory_type_bits,
-        VkMemoryAllocateFlags allocate_flags,
-        VkMemoryPropertyFlags property_flags
+        VkMemoryAllocateFlags allocate,
+        VkMemoryPropertyFlags property
     );
     DeviceMemory(DeviceMemory&& other) noexcept;
     ~DeviceMemory();
@@ -23,7 +23,7 @@ public:
 public:
     VkDeviceMemory handle() const { return m_handle; }
 
-    uint32_t FindMemopryType(uint32_t type_filter, VkMemoryPropertyFlags property_flags) const;
+    uint32_t FindMemopryType(uint32_t type_filter, VkMemoryPropertyFlags property) const;
     void*    Map(size_t offset, size_t size);
     void     Unmap();
 };

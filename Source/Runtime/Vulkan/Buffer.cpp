@@ -1,6 +1,6 @@
-#include "Vulkan/Memory/Buffer.hpp"
-#include "Vulkan/Memory/DeviceMemory.hpp"
-#include "Vulkan/Command/CommandBuffer.hpp"
+#include "Vulkan/Buffer.hpp"
+#include "Vulkan/DeviceMemory.hpp"
+#include "Vulkan/CommandBuffer.hpp"
 
 namespace Vulkan {
 
@@ -26,14 +26,14 @@ VkMemoryRequirements Buffer::GetMemoryRequirements() const {
     return requirements;
 }
 
-DeviceMemory Buffer::AllocateMemory(VkMemoryPropertyFlags property_flags) {
-    return AllocateMemory(0, property_flags);
+DeviceMemory Buffer::AllocateMemory(VkMemoryPropertyFlags property) {
+    return AllocateMemory(0, property);
 }
 
-DeviceMemory Buffer::AllocateMemory(VkMemoryAllocateFlags allocate_flags, VkMemoryPropertyFlags property_flags) {
+DeviceMemory Buffer::AllocateMemory(VkMemoryAllocateFlags allocate, VkMemoryPropertyFlags property) {
     const auto requirements = GetMemoryRequirements();
 
-    DeviceMemory memory(m_device, requirements.size, requirements.memoryTypeBits, allocate_flags, property_flags);
+    DeviceMemory memory(m_device, requirements.size, requirements.memoryTypeBits, allocate, property);
 
     VK_CHECK(vkBindBufferMemory(m_device.handle(), m_handle, memory.handle(), 0), "bind buffer memory");
 

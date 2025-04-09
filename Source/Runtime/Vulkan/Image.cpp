@@ -1,12 +1,12 @@
 
-#include "Vulkan/Command/CommandPool.hpp"
-#include "Vulkan/Memory/DepthBuffer.hpp"
+#include "Vulkan/CommandPool.hpp"
+#include "Vulkan/DepthBuffer.hpp"
 #include "Vulkan/Vulkan.hpp"
-#include "Vulkan/Memory/Buffer.hpp"
-#include "Vulkan/Memory/DeviceMemory.hpp"
-#include "Vulkan/Command/CommandBuffer.hpp"
+#include "Vulkan/Buffer.hpp"
+#include "Vulkan/DeviceMemory.hpp"
+#include "Vulkan/CommandBuffer.hpp"
 #include <stdexcept>
-#include "Vulkan/Memory/Image.hpp"
+#include "Vulkan/Image.hpp"
 #include "Vulkan/Exception.hpp"
 
 namespace Vulkan {
@@ -26,7 +26,7 @@ Image::Image(
     uint32_t          mip_level,
     VkFormat          format,
     VkImageTiling     tiling,
-    VkImageUsageFlags usage_flags
+    VkImageUsageFlags usage
 ):
     m_device(device),
     m_extent(extent),
@@ -43,7 +43,7 @@ Image::Image(
     create_info.format            = format;
     create_info.tiling            = tiling;
     create_info.initialLayout     = m_image_layout;
-    create_info.usage             = usage_flags;
+    create_info.usage             = usage;
     create_info.sharingMode       = VK_SHARING_MODE_EXCLUSIVE;
     create_info.samples           = VK_SAMPLE_COUNT_1_BIT;
     create_info.flags             = 0;
@@ -57,9 +57,9 @@ Image::~Image() {
     m_handle = nullptr;
 }
 
-DeviceMemory Image::AllocateMemory(VkMemoryPropertyFlags property_flags) const {
+DeviceMemory Image::AllocateMemory(VkMemoryPropertyFlags property) const {
     const auto   requirements = GetMemoryRequirements();
-    DeviceMemory memory(m_device, requirements.size, requirements.memoryTypeBits, 0, property_flags);
+    DeviceMemory memory(m_device, requirements.size, requirements.memoryTypeBits, 0, property);
     VK_CHECK(vkBindImageMemory(m_device.handle(), m_handle, memory.handle(), 0), "bind image memory");
 
     return memory;

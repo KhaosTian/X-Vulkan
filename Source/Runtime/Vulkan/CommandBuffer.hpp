@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Vulkan/Vulkan.hpp"
-#include "Vulkan/Command/CommandBuffers.hpp"
-#include "Vulkan/Command/CommandPool.hpp"
+#include "Vulkan/CommandBuffers.hpp"
+#include "Vulkan/CommandPool.hpp"
 #include "Vulkan/Device.hpp"
 #include <functional>
 

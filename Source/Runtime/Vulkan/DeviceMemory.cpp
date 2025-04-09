@@ -1,6 +1,6 @@
 #include "Vulkan/Exception.hpp"
 #include "Vulkan/Vulkan.hpp"
-#include "Vulkan/Memory/DeviceMemory.hpp"
+#include "Vulkan/DeviceMemory.hpp"
 #include "Vulkan/Device.hpp"
 #include <cstdint>
 #include <stdexcept>
@@ -11,22 +11,22 @@ DeviceMemory::DeviceMemory(
     const Device&         device,
     size_t                size,
     uint32_t              memory_type_bits,
-    VkMemoryAllocateFlags allocate_flags,
-    VkMemoryPropertyFlags property_flags
+    VkMemoryAllocateFlags allocate,
+    VkMemoryPropertyFlags property
 ):
     m_device(device) {
     VkMemoryAllocateFlagsInfo flags_info = {};
 
-    flags_info.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_FLAGS_INFO;
+    flags_info.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
     flags_info.pNext = nullptr;
-    flags_info.flags = allocate_flags;
+    flags_info.flags = allocate;
 
     VkMemoryAllocateInfo allocate_info = {};
 
     allocate_info.sType           = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
     allocate_info.pNext           = &flags_info;
     allocate_info.allocationSize  = size;
-    allocate_info.memoryTypeIndex = FindMemopryType(memory_type_bits, property_flags);
+    allocate_info.memoryTypeIndex = FindMemopryType(memory_type_bits, property);
 
     VK_CHECK(vkAllocateMemory(device.handle(), &allocate_info, nullptr, &m_handle), "allocate memory");
 };
@@ -41,13 +41,13 @@ DeviceMemory::~DeviceMemory() {
     m_handle = nullptr;
 }
 
-uint32_t DeviceMemory::FindMemopryType(uint32_t type_filter, VkMemoryPropertyFlags property_flags) const {
+uint32_t DeviceMemory::FindMemopryType(uint32_t type_filter, VkMemoryPropertyFlags property) const {
     VkPhysicalDeviceMemoryProperties properties;
     vkGetPhysicalDeviceMemoryProperties(m_device.physical_device(), &properties);
     // 分配内存时需要指定内存类型，type_filter按位标记了允许的内从类型，flags则标记了其必备的属性组合
     for (uint32_t i = 0; i != properties.memoryTypeCount; ++i) {
         //通过filter捕获符合要求的内存类型，通过flags查询内存属性是否支持所有特性
-        if ((type_filter & (1 << i)) && (properties.memoryTypes[i].propertyFlags & property_flags) == property_flags) {
+        if ((type_filter & (1 << i)) && (properties.memoryTypes[i].propertyFlags & property) == property) {
             return i;
         }
     }

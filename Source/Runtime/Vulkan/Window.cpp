@@ -1,5 +1,4 @@
 #include "Vulkan/Window.hpp"
-#include "Vulkan/Types.hpp"
 
 namespace Vulkan {
 Window::Window(const WindowConfig& config): m_config(config) {
@@ -21,28 +20,28 @@ Window::Window(const WindowConfig& config): m_config(config) {
     const GLFWmonitor* monitor = config.is_fullscreen ? glfwGetPrimaryMonitor() : nullptr;
 
     // 创建window
-    m_window = glfwCreateWindow(config.width, config.height, config.title.c_str(), nullptr, nullptr);
-    if (!m_window) {
+    m_handle = glfwCreateWindow(config.width, config.height, config.title.c_str(), nullptr, nullptr);
+    if (!m_handle) {
         throw std::runtime_error("failed to create glfw window.");
     }
 
     // 显示模式
     const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
     if (mode) {
-        glfwSetWindowPos(m_window, (mode->width - config.width) / 2, (mode->height - config.height) / 2);
+        glfwSetWindowPos(m_handle, (mode->width - config.width) / 2, (mode->height - config.height) / 2);
     }
 }
 
 Window::~Window() {
-    if (m_window) {
-        glfwDestroyWindow(m_window);
-        m_window = nullptr;
+    if (m_handle) {
+        glfwDestroyWindow(m_handle);
+        m_handle = nullptr;
     }
 }
 
 VkExtent2D Window::GetWindowSize() const {
     int width, height;
-    glfwGetWindowSize(m_window, &width, &height);
+    glfwGetWindowSize(m_handle, &width, &height);
     return VkExtent2D { static_cast<uint32_t>(width), static_cast<uint32_t>(height) };
 }
 
@@ -60,6 +59,6 @@ void Window::WaitEvents() const {
     glfwWaitEvents();
 }
 bool Window::ShouldClose() const {
-    return glfwWindowShouldClose(m_window);
+    return glfwWindowShouldClose(m_handle);
 }
 } // namespace Vulkan

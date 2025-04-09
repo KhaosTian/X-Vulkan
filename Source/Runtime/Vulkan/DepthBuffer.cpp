@@ -1,10 +1,10 @@
-#include "Vulkan/Memory/DepthBuffer.hpp"
+#include "Vulkan/DepthBuffer.hpp"
 #include "Vulkan/Device.hpp"
 #include "Vulkan/Exception.hpp"
-#include "Vulkan/Command/CommandPool.hpp"
-#include "Vulkan/Memory/DeviceMemory.hpp"
-#include "Vulkan/Memory/Image.hpp"
-#include "Vulkan/Memory/ImageView.hpp"
+#include "Vulkan/CommandPool.hpp"
+#include "Vulkan/DeviceMemory.hpp"
+#include "Vulkan/Image.hpp"
+#include "Vulkan/ImageView.hpp"
 
 namespace Vulkan {
 DepthBuffer::DepthBuffer(CommandPool& cmd_pool, VkExtent2D extent):
@@ -71,17 +71,17 @@ VkFormat DepthBuffer::FindSupportFormat(
     const Device&                device,
     const std::vector<VkFormat>& candidates, // 按优先级排序的候选列表
     const VkImageTiling          tiling, // 平铺方式需求
-    const VkFormatFeatureFlags   feature_flags // 必须支持的特性标志
+    const VkFormatFeatureFlags   feature // 必须支持的特性标志
 ) {
     for (auto format: candidates) {
         VkFormatProperties properties;
         vkGetPhysicalDeviceFormatProperties(device.physical_device(), format, &properties);
         // 检查线性平铺支持
-        if (tiling == VK_IMAGE_TILING_LINEAR && (properties.linearTilingFeatures & feature_flags) == feature_flags) {
+        if (tiling == VK_IMAGE_TILING_LINEAR && (properties.linearTilingFeatures & feature) == feature) {
             return format;
         }
         // 检查最优平铺支持（深度缓冲通常需要此模式）
-        if (tiling == VK_IMAGE_TILING_OPTIMAL && (properties.optimalTilingFeatures & feature_flags) == feature_flags) {
+        if (tiling == VK_IMAGE_TILING_OPTIMAL && (properties.optimalTilingFeatures & feature) == feature) {
             return format;
         }
     }
