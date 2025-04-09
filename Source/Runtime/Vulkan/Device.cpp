@@ -1,4 +1,6 @@
 #include "Vulkan/Device.hpp"
+
+#include "Vulkan/Exception.hpp"
 #include "Vulkan/Surface.hpp"
 #include "Vulkan/Enumerate.hpp"
 #include "Vulkan/Vulkan.hpp"
@@ -49,7 +51,7 @@ Device::Device(
     device_create_info.enabledLayerCount       = 0;
 
     // 创建逻辑设备
-    VK_CHECK(vkCreateDevice(m_physical_device, &device_create_info, nullptr, &m_handle), "create logical device")
+    VK_CHECK(vkCreateDevice(m_physical_device, &device_create_info, nullptr, &m_handle), "create logical device");
 
     // 获取队列句柄
     vkGetDeviceQueue(m_handle, m_queue_indices.graphics, 0, &m_queue_graphics);
@@ -72,7 +74,7 @@ void Device::CheckRequiredExtensionsSupport(const std::vector<const char*>& requ
 
     // 只有当哈希表为空时，才说明设备完整支持所必需的扩展
     if (!required_extension_set.empty()) {
-        throw std::runtime_error("missing required extension.");
+        Throw(std::runtime_error("missing required extension."));
     }
 }
 

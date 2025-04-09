@@ -5,16 +5,14 @@
 #include <cstdint>
 
 namespace Vulkan {
-struct DescriptorBinding {
-    uint32_t           binding;
-    uint32_t           descriptor_count;
-    VkDescriptorType   type;
-    VkShaderStageFlags stage;
-};
-
+class DescriptorBinding;
 class Device;
 class DescriptorPool final {
-    HANDLE(VkDescriptorPool)
+    VkDescriptorPool m_handle;
+
+public:
+    VkDescriptorPool handle() const { return m_handle; }
+
 private:
     const Device& m_device;
 

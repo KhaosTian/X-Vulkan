@@ -1,8 +1,7 @@
 #include "Vulkan/DescriptorPool.hpp"
+#include "Vulkan/DescriptorBinding.hpp"
 #include "Vulkan/Vulkan.hpp"
 #include "Vulkan/Device.hpp"
-#include <cstdint>
-#include <vector>
 
 namespace Vulkan {
 DescriptorPool::DescriptorPool(
@@ -14,11 +13,11 @@ DescriptorPool::DescriptorPool(
     std::vector<VkDescriptorPoolSize> pool_sizes;
 
     for (const auto& binding: descriptor_bindings) {
-        VkDescriptorPoolSize size = {
-            .type            = binding.type,
-            .descriptorCount = static_cast<uint32_t>(binding.descriptor_count * max_sets)
-        };
-        pool_sizes.emplace_back(size);
+        VkDescriptorPoolSize size = {};
+        size.type                 = binding.type;
+        size.descriptorCount      = static_cast<uint32_t>(binding.descriptor_count * max_sets);
+
+        pool_sizes.push_back(size);
     }
 
     VkDescriptorPoolCreateInfo create_info = {};
@@ -29,6 +28,11 @@ DescriptorPool::DescriptorPool(
     create_info.pPoolSizes                 = pool_sizes.data();
 
     VK_CHECK(vkCreateDescriptorPool(m_device.handle(), &create_info, nullptr, &m_handle), "create descriptor pool");
+}
 
-} // namespace Vulkan
+DescriptorPool::~DescriptorPool() {
+    if (m_handle == nullptr) return;
+    vkDestroyDescriptorPool(m_device.handle(), m_handle, nullptr);
+    m_handle = nullptr;
+}
 } // namespace Vulkan

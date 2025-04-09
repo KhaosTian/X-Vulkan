@@ -21,15 +21,6 @@
 #define VK_USE_PLATFORM_WIN32_KHR
 #include <vulkan/vulkan.h>
 
-#define HANDLE(HandleType) \
-private: \
-    HandleType m_handle; \
-\
-public: \
-    HandleType handle() { \
-        return m_handle; \
-    }
-
 namespace Vulkan {
 const char* ToString(VkResult result);
 void        Check(VkResult result, const char* operation, const char* file, int line);
