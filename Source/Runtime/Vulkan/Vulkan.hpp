@@ -27,6 +27,3 @@ void        Check(VkResult result, const char* operation, const char* file, int 
 } // namespace Vulkan
 
 #define VK_CHECK(result, operation) Vulkan::Check(result, operation, __FILE__, __LINE__)
-#define STR(r) \
-    case VK_##r: \
-        return #r

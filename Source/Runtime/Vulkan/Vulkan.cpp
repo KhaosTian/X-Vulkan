@@ -10,8 +10,10 @@ void Check(VkResult result, const char* operation, const char* file, int line) {
     }
 }
 
-// 实现 VkResult 到字符串的转换（需要自行实现）
 const char* ToString(const VkResult result) {
+#define STR(r) \
+    case VK_##r: \
+        return #r
     switch (result) {
         STR(SUCCESS);
         STR(NOT_READY);
