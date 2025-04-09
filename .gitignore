@@ -402,4 +402,5 @@ FodyWeavers.xsd
 # xmake
 build/
 .xmake/
-vsxmake*
+vsxmake*/
+.vscode/
