@@ -17,24 +17,11 @@ struct SwapchainSupportDetails {
 };
 
 class Swapchain final {
-private:
-    VkSwapchainKHR                          m_handle {};
-    const Device&                           m_device;
-    const VkPhysicalDevice                  m_physical_device { nullptr };
-    std::vector<VkImage>                    m_images {};
-    std::vector<std::unique_ptr<ImageView>> m_image_views {};
-
-    VkPresentModeKHR m_present_mode {};
-    VkFormat         m_format;
-    VkExtent2D       m_extent;
-    uint32_t         m_mini_image_count;
-
 public:
     Swapchain(Swapchain&&) = delete;
     Swapchain(const Device& device, const VkPresentModeKHR present_mode);
     ~Swapchain();
 
-public:
     VkSwapchainKHR                                 handle() const { return m_handle; }
     const Device&                                  device() const { return m_device; }
     const VkPhysicalDevice                         vk_physical_device() const { return m_physical_device; }
@@ -47,12 +34,21 @@ public:
     const VkExtent2D                               extent() const { return m_extent; }
 
 private:
+    VkSwapchainKHR                          m_handle {};
+    const Device&                           m_device;
+    const VkPhysicalDevice                  m_physical_device { nullptr };
+    std::vector<VkImage>                    m_images {};
+    std::vector<std::unique_ptr<ImageView>> m_image_views {};
+
+    VkPresentModeKHR m_present_mode {};
+    VkFormat         m_format;
+    VkExtent2D       m_extent;
+    uint32_t         m_mini_image_count;
+
     static SwapchainSupportDetails QuerySwapchainSupport(VkPhysicalDevice physicalDevice, const VkSurfaceKHR surface);
     static VkSurfaceFormatKHR      ChooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& surface_formats);
-    static VkPresentModeKHR
-    ChooseSwapPresentMode(const std::vector<VkPresentModeKHR>& present_modes, const VkPresentModeKHR desired_mode);
-    static VkExtent2D ChooseSwapExtent(const Window& window, const VkSurfaceCapabilitiesKHR& capabilities);
-    static uint32_t   ChooseImageCount(const VkSurfaceCapabilitiesKHR& capabilities);
+    static VkPresentModeKHR        ChooseSwapPresentMode(const std::vector<VkPresentModeKHR>& present_modes, const VkPresentModeKHR desired_mode);
+    static VkExtent2D              ChooseSwapExtent(const Window& window, const VkSurfaceCapabilitiesKHR& capabilities);
+    static uint32_t                ChooseImageCount(const VkSurfaceCapabilitiesKHR& capabilities);
 };
 } // namespace Vulkan
-

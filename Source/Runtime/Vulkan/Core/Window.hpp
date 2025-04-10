@@ -14,16 +14,11 @@ struct WindowConfig {
 };
 
 class Window final {
-private:
-    WindowConfig m_config;
-    GLFWwindow*  m_handle {};
-
 public:
     Window(Window&&) = delete;
     explicit Window(const WindowConfig& config);
     ~Window();
 
-public:
     GLFWwindow*         handle() const { return m_handle; }
     const WindowConfig& config() const { return m_config; }
 
@@ -33,7 +28,10 @@ public:
     void PollEvents() const;
     void WaitEvents() const;
     bool ShouldClose() const;
+
+private:
+    WindowConfig m_config;
+    GLFWwindow*  m_handle {};
 };
 
 } // namespace Vulkan
-

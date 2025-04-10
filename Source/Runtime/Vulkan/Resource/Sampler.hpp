@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Vulkan.hpp"
+#include "Vulkan/Core/Vulkan.hpp"
 
 namespace Vulkan {
 class Device;
@@ -30,18 +30,16 @@ struct SamplerConfig final {
 };
 
 class Sampler final {
-    VkSampler m_handle;
-
-public:
-    VkSampler handle() const { return m_handle; }
-
-private:
-    const Device& m_device;
-
 public:
     Sampler(Sampler&&) = delete;
     Sampler(const Device& device, const SamplerConfig& config);
     ~Sampler();
+
+    VkSampler handle() const { return m_handle; }
+
+private:
+    VkSampler     m_handle;
+    const Device& m_device;
 };
 
 } // namespace Vulkan
