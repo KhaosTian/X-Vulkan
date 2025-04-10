@@ -26,8 +26,6 @@ public:
     static VKAPI_ATTR VkBool32 VKAPI_CALL
     DebugCallback(VkDebugUtilsMessageSeverityFlagBitsEXT message_severity, VkDebugUtilsMessageTypeFlagsEXT message_type, const VkDebugUtilsMessengerCallbackDataEXT* callback_data, void* user_data);
 
-    VkDebugUtilsMessengerCreateInfoEXT CreateDebugMessengerCreateInfo();
-
 private:
     inline VkResult
     CreateDebugUtilsMessengerEXT(VkInstance instance, const VkDebugUtilsMessengerCreateInfoEXT* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkDebugUtilsMessengerEXT* pDebugMessenger);
