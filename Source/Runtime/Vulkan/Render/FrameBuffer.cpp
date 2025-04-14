@@ -1,4 +1,4 @@
-#include "Vulkan/Pipeline/Framebuffer.hpp"
+#include "Vulkan/Render/Framebuffer.hpp"
 #include "Vulkan/Resource/DepthBuffer.hpp"
 #include "Vulkan/Resource/ImageView.hpp"
 #include "Vulkan/Render/RenderPass.hpp"
@@ -9,8 +9,7 @@
 #include <vector>
 
 namespace Vulkan {
-Framebuffer::Framebuffer(const ImageView& image_view, const RenderPass& render_pass, bool with_ds):
-    m_device(image_view.device()) {
+Framebuffer::Framebuffer(const ImageView& image_view, const RenderPass& render_pass, bool with_ds): m_device(image_view.device()) {
     std::vector<VkImageView> attachments = { image_view.handle() };
 
     if (with_ds) {
@@ -29,17 +28,8 @@ Framebuffer::Framebuffer(const ImageView& image_view, const RenderPass& render_p
     VK_CHECK(vkCreateFramebuffer(image_view.device().handle(), &create_info, nullptr, &m_handle), "create framebuffer");
 }
 
-Framebuffer::Framebuffer(
-    const ImageView&  image_view,
-    const ImageView&  image_view1,
-    const ImageView&  image_view2,
-    const RenderPass& render_pass
-):
-    m_device(image_view.device()) {
-    std::vector<VkImageView> attachments = { image_view.handle(),
-                                             image_view1.handle(),
-                                             image_view2.handle(),
-                                             render_pass.depth_buffer().image_view().handle() };
+Framebuffer::Framebuffer(const ImageView& image_view, const ImageView& image_view1, const ImageView& image_view2, const RenderPass& render_pass): m_device(image_view.device()) {
+    std::vector<VkImageView> attachments = { image_view.handle(), image_view1.handle(), image_view2.handle(), render_pass.depth_buffer().image_view().handle() };
 
     VkFramebufferCreateInfo create_info = {};
     create_info.sType                   = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
