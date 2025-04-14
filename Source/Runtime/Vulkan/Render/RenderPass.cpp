@@ -4,18 +4,11 @@
 #include "Vulkan/Resource/DepthBuffer.hpp"
 #include "Vulkan/Core/Device.hpp"
 #include "Vulkan/Core/Vulkan.hpp"
-#include <array>
 #include <cstdint>
 #include <vector>
 
 namespace Vulkan {
-RenderPass::RenderPass(
-    const Swapchain&   swapchain,
-    const DepthBuffer& depth_buffer,
-    VkAttachmentLoadOp color_buffer_load_op
-):
-    m_swapchain(swapchain),
-    m_depth_buffer((depth_buffer)) {
+RenderPass::RenderPass(const Swapchain& swapchain, const DepthBuffer& depth_buffer, VkAttachmentLoadOp color_buffer_load_op): m_swapchain(swapchain), m_depth_buffer((depth_buffer)) {
     VkAttachmentDescription color_attachment = {};
     color_attachment.format                  = swapchain.format();
     color_attachment.samples                 = VK_SAMPLE_COUNT_1_BIT;
@@ -23,9 +16,7 @@ RenderPass::RenderPass(
     color_attachment.storeOp                 = VK_ATTACHMENT_STORE_OP_STORE;
     color_attachment.stencilLoadOp           = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
     color_attachment.stencilStoreOp          = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-    color_attachment.initialLayout           = color_buffer_load_op == VK_ATTACHMENT_LOAD_OP_CLEAR
-                                                   ? VK_IMAGE_LAYOUT_UNDEFINED
-                                                   : VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+    color_attachment.initialLayout           = color_buffer_load_op == VK_ATTACHMENT_LOAD_OP_CLEAR ? VK_IMAGE_LAYOUT_UNDEFINED : VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
     color_attachment.finalLayout             = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
 
     VkAttachmentReference color_attachment_ref = {};
@@ -60,12 +51,7 @@ RenderPass::RenderPass(
 
     VK_CHECK(vkCreateRenderPass(swapchain.device().handle(), &create_info, nullptr, &m_handle), "create render pass");
 }
-RenderPass::RenderPass(
-    const Swapchain&   swapchain,
-    const DepthBuffer& depth_buffer,
-    VkAttachmentLoadOp color_buffer_load_op,
-    VkAttachmentLoadOp depth_buffer_load_op
-):
+RenderPass::RenderPass(const Swapchain& swapchain, const DepthBuffer& depth_buffer, VkAttachmentLoadOp color_buffer_load_op, VkAttachmentLoadOp depth_buffer_load_op):
     m_swapchain(swapchain),
     m_depth_buffer((depth_buffer)) {
     VkAttachmentDescription color_attachment = {};
@@ -75,9 +61,7 @@ RenderPass::RenderPass(
     color_attachment.storeOp                 = VK_ATTACHMENT_STORE_OP_STORE;
     color_attachment.stencilLoadOp           = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
     color_attachment.stencilStoreOp          = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-    color_attachment.initialLayout           = color_buffer_load_op == VK_ATTACHMENT_LOAD_OP_CLEAR
-                                                   ? VK_IMAGE_LAYOUT_UNDEFINED
-                                                   : VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+    color_attachment.initialLayout           = color_buffer_load_op == VK_ATTACHMENT_LOAD_OP_CLEAR ? VK_IMAGE_LAYOUT_UNDEFINED : VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
     color_attachment.finalLayout             = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
 
     VkAttachmentDescription depth_attachment = {};
@@ -87,9 +71,7 @@ RenderPass::RenderPass(
     depth_attachment.storeOp                 = VK_ATTACHMENT_STORE_OP_DONT_CARE;
     depth_attachment.stencilLoadOp           = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
     depth_attachment.stencilStoreOp          = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-    depth_attachment.initialLayout           = color_buffer_load_op == VK_ATTACHMENT_LOAD_OP_CLEAR
-                                                   ? VK_IMAGE_LAYOUT_UNDEFINED
-                                                   : VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+    depth_attachment.initialLayout           = color_buffer_load_op == VK_ATTACHMENT_LOAD_OP_CLEAR ? VK_IMAGE_LAYOUT_UNDEFINED : VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
     depth_attachment.finalLayout             = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
 
     VkAttachmentReference color_attachment_ref = {};
@@ -130,13 +112,7 @@ RenderPass::RenderPass(
 
     VK_CHECK(vkCreateRenderPass(swapchain.device().handle(), &create_info, nullptr, &m_handle), "create render pass");
 }
-RenderPass::RenderPass(
-    const Swapchain&   swapchain,
-    VkFormat           format,
-    const DepthBuffer& depth_buffer,
-    VkAttachmentLoadOp color_buffer_load_op,
-    VkAttachmentLoadOp depth_buffer_load_op
-):
+RenderPass::RenderPass(const Swapchain& swapchain, VkFormat format, const DepthBuffer& depth_buffer, VkAttachmentLoadOp color_buffer_load_op, VkAttachmentLoadOp depth_buffer_load_op):
     m_swapchain(swapchain),
     m_depth_buffer((depth_buffer)) {
     VkAttachmentDescription color_attachment = {};
@@ -146,9 +122,7 @@ RenderPass::RenderPass(
     color_attachment.storeOp                 = VK_ATTACHMENT_STORE_OP_STORE;
     color_attachment.stencilLoadOp           = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
     color_attachment.stencilStoreOp          = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-    color_attachment.initialLayout           = color_buffer_load_op == VK_ATTACHMENT_LOAD_OP_CLEAR
-                                                   ? VK_IMAGE_LAYOUT_UNDEFINED
-                                                   : VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+    color_attachment.initialLayout           = color_buffer_load_op == VK_ATTACHMENT_LOAD_OP_CLEAR ? VK_IMAGE_LAYOUT_UNDEFINED : VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
     color_attachment.finalLayout             = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
 
     VkAttachmentDescription depth_attachment = {};
@@ -158,9 +132,7 @@ RenderPass::RenderPass(
     depth_attachment.storeOp                 = VK_ATTACHMENT_STORE_OP_DONT_CARE;
     depth_attachment.stencilLoadOp           = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
     depth_attachment.stencilStoreOp          = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-    depth_attachment.initialLayout           = color_buffer_load_op == VK_ATTACHMENT_LOAD_OP_CLEAR
-                                                   ? VK_IMAGE_LAYOUT_UNDEFINED
-                                                   : VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+    depth_attachment.initialLayout           = color_buffer_load_op == VK_ATTACHMENT_LOAD_OP_CLEAR ? VK_IMAGE_LAYOUT_UNDEFINED : VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
     depth_attachment.finalLayout             = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
 
     VkAttachmentReference color_attachment_ref = {};
@@ -219,9 +191,7 @@ RenderPass::RenderPass(
     color_attachment.storeOp                 = VK_ATTACHMENT_STORE_OP_STORE;
     color_attachment.stencilLoadOp           = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
     color_attachment.stencilStoreOp          = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-    color_attachment.initialLayout           = color_buffer_load_op == VK_ATTACHMENT_LOAD_OP_CLEAR
-                                                   ? VK_IMAGE_LAYOUT_UNDEFINED
-                                                   : VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+    color_attachment.initialLayout           = color_buffer_load_op == VK_ATTACHMENT_LOAD_OP_CLEAR ? VK_IMAGE_LAYOUT_UNDEFINED : VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
     color_attachment.finalLayout             = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
 
     VkAttachmentDescription color_attachment1 = {};
@@ -231,9 +201,7 @@ RenderPass::RenderPass(
     color_attachment.storeOp                  = VK_ATTACHMENT_STORE_OP_STORE;
     color_attachment.stencilLoadOp            = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
     color_attachment.stencilStoreOp           = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-    color_attachment.initialLayout            = color_buffer_load_op == VK_ATTACHMENT_LOAD_OP_CLEAR
-                                                    ? VK_IMAGE_LAYOUT_UNDEFINED
-                                                    : VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+    color_attachment.initialLayout            = color_buffer_load_op == VK_ATTACHMENT_LOAD_OP_CLEAR ? VK_IMAGE_LAYOUT_UNDEFINED : VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
     color_attachment.finalLayout              = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
 
     VkAttachmentDescription color_attachment2 = {};
@@ -243,9 +211,7 @@ RenderPass::RenderPass(
     color_attachment.storeOp                  = VK_ATTACHMENT_STORE_OP_STORE;
     color_attachment.stencilLoadOp            = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
     color_attachment.stencilStoreOp           = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-    color_attachment.initialLayout            = color_buffer_load_op == VK_ATTACHMENT_LOAD_OP_CLEAR
-                                                    ? VK_IMAGE_LAYOUT_UNDEFINED
-                                                    : VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+    color_attachment.initialLayout            = color_buffer_load_op == VK_ATTACHMENT_LOAD_OP_CLEAR ? VK_IMAGE_LAYOUT_UNDEFINED : VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
     color_attachment.finalLayout              = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
 
     VkAttachmentDescription depth_attachment = {};
@@ -255,9 +221,7 @@ RenderPass::RenderPass(
     depth_attachment.storeOp                 = VK_ATTACHMENT_STORE_OP_DONT_CARE;
     depth_attachment.stencilLoadOp           = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
     depth_attachment.stencilStoreOp          = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-    depth_attachment.initialLayout           = color_buffer_load_op == VK_ATTACHMENT_LOAD_OP_CLEAR
-                                                   ? VK_IMAGE_LAYOUT_UNDEFINED
-                                                   : VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+    depth_attachment.initialLayout           = color_buffer_load_op == VK_ATTACHMENT_LOAD_OP_CLEAR ? VK_IMAGE_LAYOUT_UNDEFINED : VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
     depth_attachment.finalLayout             = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
 
     std::vector<VkAttachmentReference> color_attachment_refs = { { 0, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL },

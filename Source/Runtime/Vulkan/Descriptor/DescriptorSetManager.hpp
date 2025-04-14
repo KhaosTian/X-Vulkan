@@ -13,11 +13,11 @@ class DescriptorSets;
 class DescriptorSetLayout;
 class DescriptorPool;
 
-class DescriptorManager final {
+class DescriptorSetManager final {
 public:
-    DescriptorManager(DescriptorManager&&) = delete;
-    DescriptorManager(const Device& device, const std::vector<DescriptorBinding>& bindings, size_t max_sets);
-    ~DescriptorManager();
+    DescriptorSetManager(DescriptorSetManager&&) = delete;
+    DescriptorSetManager(const Device& device, const std::vector<DescriptorBinding>& bindings, size_t max_sets);
+    ~DescriptorSetManager();
 
     const DescriptorSetLayout& descriptor_set_layout() const { return *m_set_layout; }
     DescriptorSets&            descriptor_sets() const { return *m_sets; }
