@@ -1,5 +1,6 @@
 #include "Vulkan/Render/GraphicsPipeline.hpp"
 
+#include "Vulkan/Descriptor/DescriptorBinding.hpp"
 #include "Vulkan/Descriptor/DescriptorSetManager.hpp"
 #include "Vulkan/Descriptor/DescriptorSetLayout.hpp"
 #include "Vulkan/Descriptor/DescriptorSets.hpp"
@@ -39,11 +40,11 @@ GraphicsPipeline::GraphicsPipeline(const Swapchain& swapchain, const DepthBuffer
 
     // viewport，视口
     auto viewport     = VkViewport {};
-    viewport.x        = 0.0f;
+    viewport.x        = 0.0f; // 视口左上角坐标
     viewport.y        = 0.0f;
-    viewport.width    = static_cast<float>(swapchain.extent().width);
+    viewport.width    = static_cast<float>(swapchain.extent().width); //  视口大小
     viewport.height   = static_cast<float>(swapchain.extent().height);
-    viewport.minDepth = 0.0f;
+    viewport.minDepth = 0.0f; // 深度缓冲区深度
     viewport.maxDepth = 1.0f;
 
     // scissor 裁剪
@@ -63,12 +64,12 @@ GraphicsPipeline::GraphicsPipeline(const Swapchain& swapchain, const DepthBuffer
     auto rasterization_state = VkPipelineRasterizationStateCreateInfo {};
 
     rasterization_state.sType                   = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
-    rasterization_state.depthBiasClamp          = VK_FALSE;
-    rasterization_state.rasterizerDiscardEnable = VK_FALSE;
-    rasterization_state.lineWidth               = 1.0f;
+    rasterization_state.depthClampEnable        = VK_FALSE; // 深度截取
+    rasterization_state.rasterizerDiscardEnable = VK_FALSE; // 丢弃片元
+    rasterization_state.lineWidth               = 1.0f; // 线宽
     rasterization_state.cullMode                = VK_CULL_MODE_BACK_BIT; // 背面剔除
-    rasterization_state.frontFace               = VK_FRONT_FACE_COUNTER_CLOCKWISE; // 顺时针正面
-    rasterization_state.depthBiasEnable         = VK_FALSE;
+    rasterization_state.frontFace               = VK_FRONT_FACE_COUNTER_CLOCKWISE; // 逆时针正面
+    rasterization_state.depthBiasEnable         = VK_FALSE; // 深度偏移
     rasterization_state.depthBiasConstantFactor = 0.0f;
     rasterization_state.depthBiasClamp          = 0.0f;
     rasterization_state.depthBiasSlopeFactor    = 0.0f;
@@ -76,12 +77,12 @@ GraphicsPipeline::GraphicsPipeline(const Swapchain& swapchain, const DepthBuffer
     // multisample state create info
     auto multisample_state                  = VkPipelineMultisampleStateCreateInfo {};
     multisample_state.sType                 = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
-    multisample_state.sampleShadingEnable   = VK_FALSE;
-    multisample_state.rasterizationSamples  = VK_SAMPLE_COUNT_1_BIT;
-    multisample_state.minSampleShading      = 1.0f;
-    multisample_state.pSampleMask           = nullptr;
-    multisample_state.alphaToCoverageEnable = VK_FALSE;
-    multisample_state.alphaToOneEnable      = VK_FALSE;
+    multisample_state.sampleShadingEnable   = VK_FALSE; // 采样着色
+    multisample_state.rasterizationSamples  = VK_SAMPLE_COUNT_1_BIT; // 采样次数
+    multisample_state.minSampleShading      = 1.0f; // 最小采样着色比例
+    multisample_state.pSampleMask           = nullptr; // 采样掩码指针
+    multisample_state.alphaToCoverageEnable = VK_FALSE; // 透明度到覆盖率？
+    multisample_state.alphaToOneEnable      = VK_FALSE; // 透明度到1？
 
     // depth stencil state create info
     auto depth_stencil_state                  = VkPipelineDepthStencilStateCreateInfo {};
@@ -128,7 +129,10 @@ GraphicsPipeline::GraphicsPipeline(const Swapchain& swapchain, const DepthBuffer
     dynamic_state.pDynamicStates               = dynamic_states.data();
 
     // descriptor set
+    std::vector<DescriptorBinding> descriptor_bindings = { { 0, 1, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT },
+                                                           { 1, 1, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT } };
 
+    m_descriptor_set_manager = std::make_unique<DescriptorSetManager>(device, descriptor_bindings, 1);
     // push constant ranges
 
     // shader stage create info
